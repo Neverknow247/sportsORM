@@ -4,34 +4,47 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using sportsORM.Models;
+using SportsORM.Models;
 
-namespace sportsORM.Controllers
+
+namespace SportsORM.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private static Context _context;
+
+        public HomeController(Context DBContext)
         {
-            _logger = logger;
+            _context = DBContext;
         }
 
+        [HttpGet("")]
         public IActionResult Index()
         {
+            ViewBag.BaseballLeagues = _context.Leagues
+                .Where(l => l.Sport.Contains("Baseball"))
+                .ToList();
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpGet("level_1")]
+        public IActionResult Level1()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet("level_2")]
+        public IActionResult Level2()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
+
+        [HttpGet("level_3")]
+        public IActionResult Level3()
+        {
+            return View();
+        }
+
     }
 }
